@@ -1,90 +1,92 @@
 #include <stdio.h>
 #include <string.h>
 
+// Definição da estrutura de uma carta com os atributos
 typedef struct {
-    char estado[50];
-    int codigo;
-    char nome[50];
-    unsigned long int populacao;
-    float area;
-    float pib;
-    int pontos_turisticos;
-    float densidade_populacional;
-    float pib_per_capita;
+    char nome[50];                   // Nome do país
+    int populacao;                   // População total
+    float area;                      // Área em km²
+    float pib;                       // Produto Interno Bruto em dólares
+    int pontosTuristicos;           // Número de pontos turísticos
+    float densidadeDemografica;     // Densidade populacional (hab/km²)
 } Carta;
 
-// Função para calcular densidade populacional
-float calcularDensidade(unsigned long int populacao, float area) {
-    if (area == 0) return 0;
-    return populacao / area;
-}
-
-// Função para calcular PIB per capita
-float calcularPIBPerCapita(float pib, unsigned long int populacao) {
-    if (populacao == 0) return 0;
-    return pib * 1000000 / populacao; // PIB em milhões
-}
-
-// Função para ler dados da carta
-void lerCarta(Carta *carta) {
-    printf("Digite o estado: ");
-    fgets(carta->estado, sizeof(carta->estado), stdin);
-    carta->estado[strcspn(carta->estado, "\n")] = '\0';
-
-    printf("Digite o codigo: ");
-    scanf("%d", &carta->codigo);
-    getchar();
-
-    printf("Digite o nome: ");
-    fgets(carta->nome, sizeof(carta->nome), stdin);
-    carta->nome[strcspn(carta->nome, "\n")] = '\0';
-
-    printf("Digite a populacao: ");
-    scanf("%lu", &carta->populacao);
-    getchar();
-
-    printf("Digite a area (em km^2): ");
-    scanf("%f", &carta->area);
-    getchar();
-
-    printf("Digite o PIB (em milhoes): ");
-    scanf("%f", &carta->pib);
-    getchar();
-
-    printf("Digite o numero de pontos turisticos: ");
-    scanf("%d", &carta->pontos_turisticos);
-    getchar();
-}
-
 int main() {
-    Carta carta1, carta2;
+    // Duas cartas cadastradas manualmente
+    Carta carta1 = {"Brasil", 213000000, 8515767.0, 1445000000000.0, 10, 25.0};
+    Carta carta2 = {"Japão", 125800000, 377975.0, 5065000000000.0, 12, 333.0};
 
-    printf("Digite os dados da Carta 1:\n");
-    lerCarta(&carta1);
+    int opcao;
 
-    printf("\nDigite os dados da Carta 2:\n");
-    lerCarta(&carta2);
+    // Menu interativo
+    printf("==== SUPER TRUNFO - PAÍSES ====\n");
+    printf("Escolha o atributo para comparar:\n");
+    printf("1. População\n");
+    printf("2. Área\n");
+    printf("3. PIB\n");
+    printf("4. Pontos turísticos\n");
+    printf("5. Densidade demográfica (vence o menor!)\n");
+    printf("Digite sua opção (1-5): ");
+    scanf("%d", &opcao);
 
-    // Calcular atributos derivados
-    carta1.densidade_populacional = calcularDensidade(carta1.populacao, carta1.area);
-    carta2.densidade_populacional = calcularDensidade(carta2.populacao, carta2.area);
+    // Exibe os nomes dos países em comparação
+    printf("\nComparando %s e %s...\n", carta1.nome, carta2.nome);
 
-    carta1.pib_per_capita = calcularPIBPerCapita(carta1.pib, carta1.populacao);
-    carta2.pib_per_capita = calcularPIBPerCapita(carta2.pib, carta2.populacao);
+    // Switch com lógica para cada atributo
+    switch(opcao) {
+        case 1: // População
+            printf("População: %d vs %d\n", carta1.populacao, carta2.populacao);
+            if (carta1.populacao > carta2.populacao)
+                printf("%s vence!\n", carta1.nome);
+            else if (carta2.populacao > carta1.populacao)
+                printf("%s vence!\n", carta2.nome);
+            else
+                printf("Empate!\n");
+            break;
 
-    // Comparar PIB per capita
-    printf("\nComparacao de cartas (Atributo: PIB per capita):\n\n");
-    printf("Carta 1 - %s (%s): %.2f\n", carta1.nome, carta1.estado, carta1.pib_per_capita);
-    printf("Carta 2 - %s (%s): %.2f\n", carta2.nome, carta2.estado, carta2.pib_per_capita);
+        case 2: // Área
+            printf("Área: %.2f km² vs %.2f km²\n", carta1.area, carta2.area);
+            if (carta1.area > carta2.area)
+                printf("%s vence!\n", carta1.nome);
+            else if (carta2.area > carta1.area)
+                printf("%s vence!\n", carta2.nome);
+            else
+                printf("Empate!\n");
+            break;
 
-    if (carta1.pib_per_capita > carta2.pib_per_capita) {
-        printf("Resultado: Carta 1 (%s) venceu!\n", carta1.nome);
-    } else if (carta2.pib_per_capita > carta1.pib_per_capita) {
-        printf("Resultado: Carta 2 (%s) venceu!\n", carta2.nome);
-    } else {
-        printf("Resultado: Empate!\n");
+        case 3: // PIB
+            printf("PIB: %.2f USD vs %.2f USD\n", carta1.pib, carta2.pib);
+            if (carta1.pib > carta2.pib)
+                printf("%s vence!\n", carta1.nome);
+            else if (carta2.pib > carta1.pib)
+                printf("%s vence!\n", carta2.nome);
+            else
+                printf("Empate!\n");
+            break;
+
+        case 4: // Pontos turísticos
+            printf("Pontos turísticos: %d vs %d\n", carta1.pontosTuristicos, carta2.pontosTuristicos);
+            if (carta1.pontosTuristicos > carta2.pontosTuristicos)
+                printf("%s vence!\n", carta1.nome);
+            else if (carta2.pontosTuristicos > carta1.pontosTuristicos)
+                printf("%s vence!\n", carta2.nome);
+            else
+                printf("Empate!\n");
+            break;
+
+        case 5: // Densidade demográfica (vence o menor!)
+            printf("Densidade demográfica: %.2f hab/km² vs %.2f hab/km²\n", carta1.densidadeDemografica, carta2.densidadeDemografica);
+            if (carta1.densidadeDemografica < carta2.densidadeDemografica)
+                printf("%s vence!\n", carta1.nome);
+            else if (carta2.densidadeDemografica < carta1.densidadeDemografica)
+                printf("%s vence!\n", carta2.nome);
+            else
+                printf("Empate!\n");
+            break;
+
+        default: // Opção inválida
+            printf("Opção inválida! Por favor, escolha de 1 a 5.\n");
     }
 
     return 0;
 }
-
