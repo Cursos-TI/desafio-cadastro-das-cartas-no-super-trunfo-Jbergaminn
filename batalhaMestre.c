@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
 #define TAM_TABULEIRO 10
 #define TAM_HABILIDADE 5
